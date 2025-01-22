@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    {% if request.user|has_group:"manager" or request.user|has_group:"admin" %}
+        <div class="text-center mt-4">
+            <h4>Справочники раздела "Машины"</h4>
+            <div>
+                <a class="btn btn-info my-2 mr-2" style="width: 270px"
+                    href="/lookups/vehicle_models" role="button">Модель техники</a>
+                <a class="btn btn-info my-2" style="width: 270px"
+                    href="/lookups/engine_models" role="button">Модель двигателя</a>
+            </div>
+            <div>
+                <a class="btn btn-info my-2 mr-2" style="width: 270px"
+                    href="/lookups/transmission_models" role="button">Модель трансмиссии</a>
+                <a class="btn btn-info my-2" style="width: 270px"
+                    href="/lookups/drive_axles" role="button">Модель ведущего моста</a>
+            </div>
+            <div>
+                <a class="btn btn-info my-2 mr-2" style="width: 270px"
+                    href="/lookups/steering_axles" role="button">Модель управляемого моста</a>
+                <a class="btn btn-info my-2" style="width: 270px"
+                    href="/lookups/service_companies" role="button">Сервисная организация</a>
+            </div>
+            <h4>Справочник раздела "ТО"</h4>
+            <div>
+                <a class="btn btn-info my-2 mr-2" style="width: 270px"
+                    href="/lookups/maintenance_types" role="button">Вид ТО</a>
+            </div>
+            <h4>Справочники раздела "Рекламации"</h4>
+            <div>
+                <a class="btn btn-info my-2 mr-2" style="width: 270px"
+                href="/lookups/denial_types" role="button">Характер отказа</a>
+                <a class="btn btn-info my-2" style="width: 270px"
+                href="/lookups/recovery_methods" role="button">Способ восстановления</a>
+            </div>
+            <div class="">
+                <a href="/user_index" class="btn btn-primary">Назад</a>
+            </div>
+        </div><br><br>
+    {% endif %}
+{% endblock content %}

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h4 class="text-center mt-4"></h4>
+    <div class="col-12 col-md-12 mt-3">
+        <div class="card-new p-4">
+            <div class="d-flex justify-content-around">
+                <a href="/user_index" class="pt-0 h3 text-uppercase nav-link {% if request.path|slice:":11" == '/user_index' %}font-weight-bold text-info{% else %}text-dark{% endif %}">машины</a>
+                <a href="/maintenance" class="pt-0 h3 text-uppercase nav-link {% if request.path|slice:":12" == '/maintenance' %}font-weight-bold text-info{% else %}text-dark{% endif %}">то</a>
+                <a href="/complaints" class="pt-0 h3 text-uppercase nav-link {% if request.path|slice:":12" == '/complaints' %}font-weight-bold text-info{% else %}text-dark{% endif %}">рекламации</a>
+            </div>
+            <h4 class="text-center my-3">Информация о рекламациях вашей техники:</h4>
+            <div class="d-flex justify-content-between align-items-end my-3">
+                <div>
+                    <span class="select_name">сервисная компания</span>
+                    <select class="form-control" onchange="window.location.assign('?sc=' + this.value);">
+                        <option value="{{ sc }}">&nbsp;{{ sc }}&nbsp;</option>
+                        {% for item in service_company %}
+                            {% if item %}
+                                <option value="{{ item }}">&nbsp;{{ item }}&nbsp;</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <span class="select_name">узел отказа</span>
+                    <select class="form-control" onchange="window.location.assign('?fn=' + this.value);">
+                        <option value="{{ fn }}">&nbsp;{{ fn }}&nbsp;</option>
+                        {% for item in failure_node %}
+                            <option value="{{ item }}">&nbsp;{{ item }}&nbsp;</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <span class="select_name">способ восстановления</span>
+                    <select class="form-control" onchange="window.location.assign('?rm=' + this.value);">
+                        <option value="{{ rm }}">&nbsp;{{ rm }}&nbsp;</option>
+                        {% for item in recovery_method %}
+                            <option value="{{ item }}">&nbsp;{{ item }}&nbsp;</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <a title="Очистить фильтры" class="btn btn-primary" href="?clear=clear">Сбросить</a>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th><a title="Сортировать" href="?order_by=car">&#9650; </a>Машина<br>
+                        <a title="Сортировать" href="?order_by=service_company">&#9650; </a>Сервисная организация</th>
+                    <th><a title="Сортировать" href="?order_by=date_of_refusal">&#9650; </a>Дата отказа<br>
+                        <a title="Сортировать" href="?order_by=operating_time">&#9650; </a>Наработка</th>
+                    <th><a title="Сортировать" href="?order_by=failure_node">&#9650; </a>Узел отказа<br>
+                        <a title="Сортировать" href="?order_by=denial_type">&#9650; </a>Характер отказа</th>
+                    <th><a title="Сортировать" href="?order_by=recovery_method">&#9650; </a>Способ восстановления<br>
+                        <a title="Сортировать" href="?order_by=used_details">&#9650; </a>Используемые запасные части</th>
+                    <th><a title="Сортировать" href="?order_by=date_of_restoration">&#9650; </a>Дата восстановления<br>
+                        <a title="Сортировать" href="?order_by=equipment_downtime">&#9650; </a>Время простоя техники</th>
+                    <th>Действия</th>
+                </tr>
+                {% for complaint in complaints %}
+                    <tr>
+                        <td>{{ complaint.car.vin }}<br>
+                            {{ complaint.service_company.name }}</td>
+                        <td>{{ complaint.date_of_refusal|date:"d.m.Y" }}<br>
+                            {{ complaint.operating_time }}</td>
+                        <td>{{ complaint.failure_node }}<br>
+                            {{ complaint.denial_type }}</td>
+                        <td>{{ complaint.recovery_method }}<br>
+                            {{ complaint.used_details }}</td>
+                        <td>{{ complaint.date_of_restoration|date:"d.m.Y" }}<br>
+                            {{ complaint.equipment_downtime }}</td>
+                        <td><a href="/complaints/{{ complaint.pk }}" class="btn btn-info">Подробнее</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="text-center">
+                {% if request.user|has_group:"service" or request.user|has_group:"manager" or request.user|has_group:"admin" %}
+                    <a class="btn btn-primary" href="/complaints/new">Добавить новую запись о рекламации</a>
+                {% endif %}
+                {% if request.user|has_group:"manager" or request.user|has_group:"admin" %}
+                    <a class="btn btn-primary" href="/lookups" role="button">Редактор справочников</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,87 @@
+
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h4 class="text-center">Новая запись рекламации</h4>
+    <div class="col-12 col-md-6 offset-md-3 mt-3">
+        <div class="form-group">
+            <select name="car" class="form-control" onchange="window.location.href = this.value">
+                <option value="{{select_car.pk}}">{{ select_car }}</option>
+                {% for car in cars %}
+                    {% if car.pk != select_car.pk %}
+                        <option value="?id={{car.pk}}">{{ car.vin }}</option>
+                    {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Пожалуйста, исправьте ошибки:</strong>
+                    <ul>
+                        {% if form.non_field_errors %}
+                            <li>{{ form.non_field_errors }}</li>
+                        {% endif %}
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <li>
+                                {{ field.label }}
+                                <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="date_of_refusal">Дата отказа</label>
+                <input type="date" id="date_of_refusal" name="date_of_refusal" class="form-control">
+            </div>
+            <div class="form-group">
+                {{ form.service_company }}
+                <input type="hidden" name="car" value="{{ select_car.pk }}">
+            </div>
+            <div class="form-group">
+                <input type="number" name="operating_time" class="form-control" placeholder="Наработка м/час">
+            </div>
+            <div class="form-group">
+                <input type="text" name="failure_node" class="form-control" placeholder="Узел отказа">
+            </div>
+            <div class="form-group">
+                <select name="denial_type" class="form-control">
+                    <option selected disabled>Характер отказа</option>
+                    {% for denial_type in denial_types %}
+                        <option value="{{ denial_type.pk }}">{{ denial_type.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="recovery_method" class="form-control">
+                    <option selected disabled>Способ восстановления</option>
+                    {% for recovery_method in recovery_methods %}
+                        <option value="{{ recovery_method.pk }}">{{ recovery_method.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="used_details" class="form-control" placeholder="Используемые запасные части">
+            </div>
+            <div class="form-group">
+                <label for="date_of_restoration">Дата восстановления</label>
+                <input type="date" id="date_of_restoration" name="date_of_restoration" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="equipment_downtime" class="form-control" placeholder="Время простоя техники">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Создать</button>
+                <a href="/complaints" class="btn btn-info">Назад</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

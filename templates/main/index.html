@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="row">
+        <div class="col-12 my-4">
+            <div class="card-new p-3">
+                <h3 class="text-center mb-4">Проверьте комплектацию и технические характеристики техники Силант</h3>
+                <form method="POST" class="d-flex">
+                    {% csrf_token %}
+                    <input type="text" name="vin" required class="form-control mr-1" placeholder="Заводской номер">
+                    <button type="submit" class="btn btn-outline-success">Поиск</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-12 my-4">
+            <div class="card-new p-3">
+                <h4 class="text-center">Информация о комплектации и технических характеристиках вашей техники</h4>
+                {% if cars %}
+                    {% for car in cars %}
+                        <table class="table table-hover">
+                            <tr><td>Заводской номер машины:</td>
+                                <td>{{ car.vin }}</td></tr>
+                            <tr><td>Модель техники:</td>
+                                <td><a href="#" data-toggle="modal" data-target="#vehicle_model">
+                                <b>{{ car.vehicle_model.name }}</b></a></td></tr>
+                            <tr><td>Модель двигателя:</td>
+                                <td><a href="#" data-toggle="modal" data-target="#engine_model">
+                                <b>{{ car.engine_model.name }}</b></a></td></tr>
+                            <tr><td>Зав. № двигателя:</td><td>{{ car.engine_number }}</td></tr>
+                            <tr><td>Модель трансмиссии:</td>
+                                <td><a href="#" data-toggle="modal" data-target="#transmission_model">
+                                <b>{{ car.transmission_model.name }}</b></a></td></tr>
+                            <tr><td>Зав. № трансмиссии:</td><td>{{ car.transmission_number }}</td></tr>
+                            <tr><td>Модель ведущего моста:</td>
+                                <td><a href="#" data-toggle="modal" data-target="#drive_axle_model">
+                                <b>{{ car.drive_axle.name }}</b></a></td></tr>
+                            <tr><td>Зав. № ведущего моста:</td><td>{{ car.drive_axle_number }}</td></tr>
+                            <tr><td>Модель управляемого моста:</td>
+                                <td><a href="#" data-toggle="modal" data-target="#steerable_axle_model">
+                                    <b>{{ car.steering_axle.name }}</b></a></td></tr>
+                            <tr><td>Зав. № управляемого моста:</td><td>{{ car.steering_axle_number }}</td></tr>
+                        </table>
+
+                        <div class="modal fade" tabindex="-1" id="vehicle_model">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  Описание из справочника:<br><br>
+                                  {% if car.vehicle_model.description %}
+                                      {{ car.vehicle_model.description }}
+                                  {% else %}
+                                      Описание отсутствует
+                                  {% endif %}
+                                  <br><br><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal fade" tabindex="-1" id="engine_model">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  Описание из справочника:<br><br>
+                                  {% if car.engine_model.description %}
+                                      {{ car.engine_model.description }}
+                                  {% else %}
+                                      Описание отсутствует
+                                  {% endif %}
+                                  <br><br><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal fade" tabindex="-1" id="transmission_model">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  Описание из справочника:<br><br>
+                                  {% if car.transmission_model.description %}
+                                      {{ car.transmission_model.description }}
+                                  {% else %}
+                                      Описание отсутствует
+                                  {% endif %}
+                                  <br><br><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal fade" tabindex="-1" id="drive_axle_model">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  Описание из справочника:<br><br>
+                                  {% if car.drive_axle.description %}
+                                      {{ car.drive_axle.description }}
+                                  {% else %}
+                                      Описание отсутствует
+                                  {% endif %}
+                                  <br><br><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="modal fade" tabindex="-1" id="steerable_axle_model">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-body">
+                                  Описание из справочника:<br><br>
+                                  {% if car.steering_axle.description %}
+                                      {{ car.steering_axle.description }}
+                                  {% else %}
+                                      Описание отсутствует
+                                  {% endif %}
+                                  <br><br><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    {% endfor %}
+                {% else %}
+                    <h4 class="mt-4 text-info text-center">Данных о машине с таким заводским номером нет</h4>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

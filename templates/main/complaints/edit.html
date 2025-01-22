@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h4 class="text-center">Редактирование рекламации</h4>
+    <div class="col-12 col-md-6 offset-md-3 mt-3">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Пожалуйста, исправьте ошибки:</strong>
+                    <ul>
+                        {% if form.non_field_errors %}
+                            <li>{{ form.non_field_errors }}</li>
+                        {% endif %}
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <li>
+                                {{ field.label }}
+                                <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <label for="date_of_refusal">Дата отказа</label>
+                <input type="date" id="date_of_refusal" name="date_of_refusal" value="{{ form.instance.date_of_refusal|date:'Y-m-d' }}" class="form-control">
+            </div>
+            <div class="form-group">
+                {{ form.service_company }}
+                <input type="hidden" name="car" value="{{ form.instance.car.pk }}">
+            </div>
+            <div class="form-group">
+                <input type="number" name="operating_time" class="form-control" value="{{ form.instance.operating_time }}" placeholder="Наработка м/час">
+            </div>
+            <div class="form-group">
+                <input type="text" name="failure_node" class="form-control" value="{{ form.instance.failure_node }}" placeholder="Узел отказа">
+            </div>
+            <div class="form-group">
+                <select name="denial_type" class="form-control">
+                    <option selected disabled>Характер отказа</option>
+                    {% for denial_type in denial_types %}
+                        {% if denial_type.pk == form.instance.denial_type.pk %}    
+                            <option value="{{ denial_type.pk }}" selected>{{ denial_type.name }}</option>
+                        {% else %}
+                            <option value="{{ denial_type.pk }}">{{ denial_type.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="recovery_method" class="form-control">
+                    <option selected disabled>Способ восстановления</option>
+                    {% for recovery_method in recovery_methods %}
+                        {% if recovery_method.pk == form.instance.recovery_method.pk %}    
+                            <option value="{{ recovery_method.pk }}" selected>{{ recovery_method.name }}</option>
+                        {% else %}
+                            <option value="{{ recovery_method.pk }}">{{ recovery_method.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="used_details" value="{{ form.instance.used_details }}" class="form-control" placeholder="Используемые запасные части">
+            </div>
+            <div class="form-group">
+                <label for="date_of_restoration">Дата восстановления</label>
+                <input type="date" id="date_of_restoration" value="{{ form.instance.date_of_restoration|date:'Y-m-d' }}" name="date_of_restoration" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="equipment_downtime" value="{{ form.instance.equipment_downtime }}" class="form-control" placeholder="Время простоя техники">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <a href="/complaints/{{ form.instance.pk }}" class="btn btn-info">Назад</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

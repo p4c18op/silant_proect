@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <div class="col-12 col-md-12 mt-3">
+        <div class="card-new p-4">
+            <div class="d-flex justify-content-around">
+                <a href="/user_index" class="pt-0 h3 text-uppercase nav-link {% if request.path|slice:":11" == '/user_index' %}font-weight-bold text-info{% else %}text-dark{% endif %}">машины</a>
+                <a href="/maintenance" class="pt-0 h3 text-uppercase nav-link {% if request.path|slice:":12" == '/maintenance' %}font-weight-bold text-info{% else %}text-dark{% endif %}">то</a>
+                <a href="/complaints" class="pt-0 h3 text-uppercase nav-link {% if request.path|slice:":12" == '/complaints' %}font-weight-bold text-info{% else %}text-dark{% endif %}">рекламации</a>
+            </div>
+            <h4 class="text-center my-3">Информация о проведенных ТО вашей техники</h4>
+            <div class="d-flex justify-content-between align-items-end mb-3">
+                <div>
+                    <span class="select_name">Зав.номер машины</span>
+                    <select class="form-control" onchange="window.location.assign('?cr=' + this.value);">
+                        <option value="{{ cr }}">&nbsp;{{ cr }}&nbsp;</option>
+                        {% for item in car %}
+                            <option value="{{ item }}">&nbsp;{{ item }}&nbsp;</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <span class="select_name">Сервисная компания</span>
+                    <select class="form-control" onchange="window.location.assign('?sc=' + this.value);">
+                        <option value="{{ sc }}">&nbsp;{{ sc }}&nbsp;</option>
+                        {% for item in service_company %}
+                            <option value="{{ item }}">&nbsp;{{ item }}&nbsp;</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <span class="select_name">Вид ТО</span>
+                    <select class="form-control" onchange="window.location.assign('?mt=' + this.value);">
+                        <option value="{{ mt }}">&nbsp;{{ mt }}&nbsp;</option>
+                        {% for item in maintenance_type %}
+                            <option value="{{ item }}">&nbsp;{{ item }}&nbsp;</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div>
+                    <a title="Очистить фильтры" class="btn btn-primary" href="?clear=clear">Сбросить</a>
+                </div>
+            </div>
+            <table class="table table-hover">
+                <tr>
+                    <th><a title="Сортировать" href="?order_by=car">&#9650; </a>Машина</th>
+                    <th><a title="Сортировать" href="?order_by=service_company">&#9650; </a>Сервисная организация</th>
+                    <th><a title="Сортировать" href="?order_by=type_maintenance">&#9650; </a>Вид ТО<br>
+                        <a title="Сортировать" href="?order_by=maintenance_date" >&#9650; </a>Дата ТО</th>
+                    <th><a title="Сортировать" href="?order_by=operating_time">&#9650; </a>Наработка</th>
+                    <th><a title="Сортировать" href="?order_by=order">&#9650; </a>№ заказа-наряда<br>
+                        <a title="Сортировать" href="?order_by=order_date">&#9650; </a>Дата заказа-наряда</th>
+                    <th>Действия</th>
+                </tr>
+                {% for maintenance in maintenance_list %}
+                    <tr>
+                        <td>{{ maintenance.car.vin }}</td>
+                        <td>{{ maintenance.service_company.name }}</td>
+                        <td>{{ maintenance.maintenance_type.name }}<br>
+                            {{ maintenance.maintenance_date|date:"d.m.Y" }}</td>
+                        <td>{{ maintenance.operating_time }}</td>
+                        <td>{{ maintenance.order }}<br>
+                            {{ maintenance.order_date|date:"d.m.Y" }}</td>
+                        <td><a href="/maintenance/{{ maintenance.pk }}" class="btn btn-info">Подробнее</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <div class="text-center">
+                <a class="btn btn-primary" href="/maintenance/new">Добавить первую запись о ТО</a>
+                {% if request.user|has_group:"manager" or request.user|has_group:"admin" %}
+                    <a class="btn btn-primary" href="/lookups" role="button">Редактор справочников</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock content %}

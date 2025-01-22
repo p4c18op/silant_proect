@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h4 class="text-center mt-4">Список моделей трансмиссии:</h4>
+    <div class="col-12 col-md-6 offset-md-3 mt-3">
+        <div class="card-new p-4">
+            <a href="/lookups" class="btn btn-info mb-3">Назад</a>
+            <a href="/lookups/transmission_models/new" class="btn btn-success mb-3">Добавить</a>
+            <table class="table table-hover">
+                <tr>
+                    <th>Наименование</th>
+                    <th>Описание</th>
+                    <th>Действия</th>
+                </tr>
+                {% for transmission_model in transmission_models %}
+                    <tr>
+                        <td>{{ transmission_model.name }}</td>
+                        <td>{{ transmission_model.description }}</td>
+                        <td><a href="/lookups/transmission_models/edit/{{ transmission_model.pk }}" class="btn btn-info">Изменить</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}

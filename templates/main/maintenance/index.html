@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-12 my-4">
+        <div class="card-new p-3">
+            <div class="mb-2">
+                <a href="/maintenance" class="btn btn-info">Назад</a>
+                {% if perms.silant.change_maintenance %}
+                    <a href="/maintenance/edit/{{ maintenance.pk }}" class="btn btn-info">Редактировать</a>
+                {% endif %}
+                {% if perms.silant.delete_maintenance %}
+                    <a href="/maintenance/delete/{{ maintenance.pk }}" class="btn btn-danger">Удалить</a>
+                {% endif %}
+            </div>
+
+            <h4 class="">Данные ТО</h4>
+            <div class="text-center">
+                <table class="table table-hover">
+                    <tr><td>Зав. №  машины:</td><td>{{ maintenance.car.vin }}</td></tr>
+                    <tr><td>Сервисная организация:</td><td><a href="#" data-toggle="modal" data-target="#service_company"><b>{{ maintenance.service_company.name }}</b></a></td></tr>
+                    <tr><td>Вид ТО:</td><td><a href="#" data-toggle="modal" data-target="#maintenance_type"><b>{{ maintenance.maintenance_type.name }}</b></a></td></tr>
+                    <tr><td>Дата проведения ТО:</td><td>{{ maintenance.maintenance_date }}</td></tr>
+                    <tr><td>Наработка мотто/часов:</td><td>{{ maintenance.operating_time }}</td></tr>
+                    <tr><td>Номер заказа-наряда:</td><td>{{ maintenance.order }}</td></tr>
+                    <tr><td>Дата заказа-наряда:</td><td>{{ maintenance.order_date }}</td></tr>
+                </table>
+            </div>
+
+            <div class="modal fade" tabindex="-1" id="service_company">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Описание из справочника:<br><br>
+                            {% if maintenance.service_company.description %}
+                                {{ maintenance.service_company.description }}
+                            {% else %}
+                                Описание отсутствует
+                            {% endif %}
+                            <br><br><button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" id="maintenance_type">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Описание из справочника:<br><br>
+                            {% if maintenance.maintenance_type.description %}
+                                {{ maintenance.maintenance_type.description }}
+                            {% else %}
+                                Описание отсутствует
+                            {% endif %}
+                            <br><br><button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

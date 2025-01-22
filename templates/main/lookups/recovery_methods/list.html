@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h4 class="text-center mt-4">Список способов восстановления:</h4>
+    <div class="col-12 col-md-6 offset-md-3 mt-3">
+        <div class="card-new p-4">
+            <a href="/lookups" class="btn btn-info mb-3">Назад</a>
+            <a href="/lookups/recovery_methods/new" class="btn btn-success mb-3">Добавить</a>
+            <table class="table table-hover">
+                <tr>
+                    <th>Наименование</th>
+                    <th>Описание</th>
+                    <th>Действия</th>
+                </tr>
+                {% for recovery_method in recovery_methods %}
+                    <tr>
+                        <td>{{ recovery_method.name }}</td>
+                        <td>{{ recovery_method.description }}</td>
+                        <td><a href="/lookups/recovery_methods/edit/{{ recovery_method.pk }}" class="btn btn-info">Изменить</a></td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock content %}

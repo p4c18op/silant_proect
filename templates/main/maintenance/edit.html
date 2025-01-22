@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+    <h4 class="text-center">Редактирование записи о ТО</h4>
+    <div class="col-12 col-md-6 offset-md-3 mt-3">
+        <form method="post">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Пожалуйста, исправьте ошибки:</strong>
+                    <ul>
+                        {% if form.non_field_errors %}
+                            <li>{{ form.non_field_errors }}</li>
+                        {% endif %}
+                        {% for field in form %}
+                            {% if field.errors %}
+                            <li>
+                                {{ field.label }}
+                                <ul class="errorlist">
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                                </ul>
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <select name="maintenance_type" class="form-control">
+                    <option selected disabled>Вид ТО</option>
+                    {% for maintenance_type in maintenance_types %}
+                        {% if maintenance_type.pk == form.instance.maintenance_type.pk %}    
+                            <option value="{{ maintenance_type.pk }}" selected>{{ maintenance_type.name }}</option>
+                        {% else %}
+                            <option value="{{ maintenance_type.pk }}">{{ maintenance_type.name }}</option>
+                        {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="hidden" name="service_company" value="{{ form.instance.service_company.pk }}">
+                
+                <input type="hidden" name="car" value="{{ form.instance.car.pk }}">
+            </div>
+            <div class="form-group">
+                <label for="maintenance_date">Дата проведения ТО</label>
+                <input type="date" id="maintenance_date" name="maintenance_date" class="form-control" value="{{ form.instance.maintenance_date|date:'Y-m-d' }}">
+            </div>
+            <div class="form-group">
+                <input type="number" name="operating_time" class="form-control" value="{{ form.instance.operating_time }}" placeholder="Наработка мото/часов">
+            </div>
+            <div class="form-group">
+                <input type="text" name="order" class="form-control" value="{{ form.instance.order }}" placeholder="Номер заказа-наряда">
+            </div>
+            <div class="form-group">
+                <label for="order_date">Дата заказа-наряда</label>
+                <input type="date" name="order_date" class="form-control" value="{{ form.instance.order_date|date:'Y-m-d' }}">
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <a href="/maintenance" class="btn btn-info">Назад</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

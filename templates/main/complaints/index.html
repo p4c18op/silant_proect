@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load custom_tags %}
+{% block content %}
+<div class="row">
+    <div class="col-12 my-4">
+        <div class="card-new p-3">
+            <div class="mb-2">
+                <a href="/complaints" class="btn btn-info">Назад</a>
+                {% if perms.silant.change_maintenance %}
+                    <a href="/complaints/edit/{{ complaint.pk }}" class="btn btn-info">Редактировать</a>
+                {% endif %}
+                {% if perms.silant.delete_maintenance %}
+                    <a href="/complaints/delete/{{ complaint.pk }}" class="btn btn-danger">Удалить</a>
+                {% endif %}
+            </div>
+
+            <h4 class="">Данные о рекламации</h4>
+            <div class="text-center">
+                <table class="table table-hover">
+                    <tr><td>Зав. №  машины:</td><td>{{ complaint.car }}</td></tr>
+                    <tr><td>Сервисная организация:</td><td><a href="#" data-toggle="modal" data-target="#service_company"><b>{{ complaint.service_company.name }}</b></a></td></tr>
+                    <tr><td>Дата отказа:</td><td>{{ complaint.date_of_refusal }}</td></tr>
+                    <tr><td>Наработка м/час:</td><td>{{ complaint.operating_time }}</td></tr>
+                    <tr><td>Узел отказа:</td><td>{{ complaint.failure_node }}</td></tr>
+                    <tr><td>Характер отказа:</td><td><a href="#" data-toggle="modal" data-target="#description_failure"><b>{{ complaint.denial_type.name }}</b></a></td></tr>
+                    <tr><td>Способ восстановления:</td><td><a href="#" data-toggle="modal" data-target="#recovery_method"><b>{{ complaint.recovery_method }}</b></a></td></tr>
+                    <tr><td>Используемые запасные части:</td><td>{{ complaint.used_details }}</td></tr>
+                    <tr><td>Дата восстановления:</td><td>{{ complaint.date_of_restoration }}</td></tr>
+                    <tr><td>Время простоя техники:</td><td>{{ complaint.equipment_downtime }}</td></tr>
+                </table>
+            </div>
+
+            <div class="modal fade" tabindex="-1" id="service_company">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Описание из справочника:<br><br>
+                            {% if complaint.service_company.description %}
+                                {{ complaint.service_company.description }}
+                            {% else %}
+                                Описание отсутствует
+                            {% endif %}
+                            <br><br><button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" id="description_failure">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Описание из справочника:<br><br>
+                            {% if complaint.denial_type.description %}
+                                {{ complaint.denial_type.description }}
+                            {% else %}
+                                Описание отсутствует
+                            {% endif %}
+                            <br><br><button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" id="description_failure">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Описание из справочника:<br><br>
+                            {% if complaint.description_failure.description %}
+                                {{ complaint.description_failure.description }}
+                            {% else %}
+                                Описание отсутствует
+                            {% endif %}
+                            <br><br><button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" tabindex="-1" id="recovery_method">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            Описание из справочника:<br><br>
+                            {% if complaint.recovery_method.description %}
+                                {{ complaint.recovery_method.description }}
+                            {% else %}
+                                Описание отсутствует
+                            {% endif %}
+                            <br><br><button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

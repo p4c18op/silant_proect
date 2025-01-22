@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% block content %}
+    <h4 class="text-center">Параметры машины:</h4>
+    <div class="col-12 col-md-6 offset-md-3 mt-3">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <input type="text" name="vin" class="form-control" placeholder="Заводской номер">
+            </div>
+            <div class="form-group">
+                <select name="vehicle_model" class="form-control">
+                    <option selected disabled>Модель техники</option>
+                    {% for vehicle_model in vehicle_models %}
+                        <option value="{{ vehicle_model.pk }}">{{ vehicle_model.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="engine_model" class="form-control">
+                    <option selected disabled>Модель двигателя</option>
+                    {% for engine_model in engine_models %}
+                        <option value="{{ engine_model.pk }}">{{ engine_model.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="engine_number" class="form-control" placeholder="Номер двигателя">
+            </div>
+            <div class="form-group">
+                <select name="transmission_model" class="form-control">
+                    <option selected disabled>Модель трансмиссии</option>
+                    {% for transmission_model in transmission_models %}
+                        <option value="{{ transmission_model.pk }}">{{ transmission_model.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="transmission_number" class="form-control" placeholder="Номер трансмиссии">
+            </div>
+            <div class="form-group">
+                <select name="drive_axle" class="form-control">
+                    <option selected disabled>Модель ведущего моста</option>
+                    {% for drive_axle in drive_axles %}
+                        <option value="{{ drive_axle.pk }}">{{ drive_axle.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="drive_axle_number" class="form-control" placeholder="Номер ведущего моста">
+            </div>
+            <div class="form-group">
+                <select name="steering_axle" class="form-control">
+                    <option selected disabled>Модель управляемого моста</option>
+                    {% for steering_axle in steering_axles %}
+                        <option value="{{ steering_axle.pk }}">{{ steering_axle.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" name="steering_axle_number" class="form-control" placeholder="Номер управляемого моста">
+            </div>
+            <div class="form-group">
+                <input type="text" name="supply_agreement" class="form-control" placeholder="Договор поставки №, дата.">
+            </div>
+            <div class="form-group">
+                <input type="date" name="shipment_date" class="form-control">
+            </div>
+            <div class="form-group">
+                <input type="text" name="consignee" class="form-control" placeholder="Грузополучатель">
+            </div>
+            <div class="form-group">
+                <textarea rows="2" name="delivery_address" class="form-control" placeholder="Адрес поставки (эксплуатации)"></textarea>
+            </div>
+            <div class="form-group">
+                <textarea rows="4" name="equipment" class="form-control" placeholder="Комплектация (доп. опции)"></textarea>
+            </div>
+            <div class="form-group">
+                <select name="user" class="form-control">
+                    <option selected disabled>Клиент</option>
+                    {% for user in users %}
+                        <option value="{{ user.pk }}">{{ user.last_name }} {{ user.first_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <select name="service_company" class="form-control">
+                    <option selected disabled>Сервисная организация</option>
+                    {% for service_company in service_companies %}
+                        <option value="{{ service_company.pk }}">{{ service_company.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Сохранить</button>
+                <a class="btn btn-info" href="/user_index">Отмена</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
